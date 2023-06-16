@@ -1,0 +1,71 @@
+---
+title: "R course - Does height differ by sex?"
+date: "6/8/2023"
+author: "Leonie Schreck"
+editor: visual
+format:
+  html:
+    code-fold: show
+    code-tools: true
+    df-print: paged
+    embed-resources: true
+---
+
+## Introduction
+
+We wanted to study if height differs by sex.
+
+## Libraries
+
+We used the following R libraries.
+
+```{r}
+#| output: false
+library(lubridate)
+library(ggplot2)
+library(here)
+library(gtsummary)
+library(tidyverse)
+library(readr)
+```
+
+We load the "perulung_ems" data set.
+
+```{r}
+#| output: false
+data <- read_csv(here("data", "raw", "perulung_ems.csv"))
+
+```
+
+We change the variable classes.
+
+```{r}
+#| output: false
+data <- data |> mutate(sex = factor(sex, levels=c(0,1), labels=c("f","m")),
+               respsymptoms = factor(respsymptoms, levels=c(0,1), labels=c("no","yes")),
+               asthma_hist = factor(asthma_hist, levels=c("never","previous asthma","current asthma")))
+
+```
+
+## Descriptive table
+
+A descriptive table can be found below:
+
+```{r}
+tabl_summary<-
+  data |>
+    select(fev1, age, height, sex, respsymptoms) |>
+  tbl_summary(
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})", 
+                                     "{median} ({p25}, {p75})", 
+                                     "{min}, {max}"))
+tabl_summary
+```
+
+
+
+```{r}
+
+```
+
